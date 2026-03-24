@@ -239,9 +239,16 @@ def detect_document_type(
     # Judicial: action + kinship co-occurrence
     action_words = {"taka", "kata", "maqa", "maka", "llalla"}
     kinship_words = {"kaka", "tata", "mama", "pana"}
-    if len(words & action_words) >= 1 and len(words & kinship_words) >= 1:
+    action_hits = len(words & action_words)
+    kinship_hits = len(words & kinship_words)
+    if action_hits >= 1 and kinship_hits >= 1:
         scores["judicial_proceeding"] *= 2.0
         scores["kinship_lineage"] *= 0.6
+        # Strong judicial signal: 2+ violence words + 2+ kinship = almost certainly judicial
+        if action_hits >= 2 or kinship_hits >= 2:
+            scores["judicial_proceeding"] = max(scores["judicial_proceeding"], 2.5)
+            # Suppress astro — mama+kaki in a violent context is NOT astronomy
+            scores["astronomical_journal"] *= 0.3
 
     # Labor: maki + companions
     if "maki" in words:
