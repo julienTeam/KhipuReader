@@ -153,21 +153,46 @@ class ClusterRecord:
 # --- Document-type detection -------------------------------------------------
 
 DOCUMENT_PROFILES: dict[str, set[str]] = {
-    "administrative_register": {"kama", "kamay", "ypa", "pataka", "qapa", "kapa",
+    # §4.1 Tribute register (detected via Calculator schema + high values)
+    "tribute_register":        {"pataka", "kama", "kamay", "ypa", "llaqa"},
+    # §4.2 Paired admin register (detected via paired khipu structure)
+    "paired_register":         {"kama", "kamay", "ypa", "pataka", "qapa", "kapa",
                                  "llaqa", "pata"},
-    "kinship_lineage":         {"kaka", "mama", "papa", "tata", "pana", "tayta",
-                                 "panaka", "tayka", "nana"},
-    "labor_tribute":           {"maki", "taka", "kata", "paka", "maka", "paki",
-                                 "makay", "takay", "kiki", "kaki", "tama"},
-    "ritual_oracle":           {"taki", "naqa", "pama", "napa", "naku", "tina",
-                                 "llapa", "nay", "waka"},
-    "judicial_proceeding":     {"llalla", "mana", "taq", "pay", "kay", "sina",
-                                 "pi", "piqa", "taka", "maqa", "kata"},
-    "astronomical_journal":    {"kama", "mama", "paka", "maqa"},  # CORE only
-    "agro_pastoral":           {"kaki", "kaqa", "wama", "chaqa", "paki", "taki",
-                                 "taqa", "siqa", "maki"},
+    # §4.3 Cadastral survey
     "cadastral_survey":        {"qaqa", "kaqa", "taqa", "chiqa", "paqa", "naqa",
                                  "siqa", "piqa", "qata", "qama"},
+    # §4.4 Regional census (3 colors AB/MB/HB)
+    "regional_census":         {"tama", "llaqa", "pataka", "kama", "pata"},
+    # §4.5 Judicial dossier
+    "judicial_proceeding":     {"llalla", "mana", "taq", "pay", "kay", "sina",
+                                 "pi", "piqa", "taka", "maqa", "kata"},
+    # §4.6 Formal admin text
+    "formal_admin":            {"kama", "kamay", "ypa", "qapa", "kapa", "tayta",
+                                 "panaka"},
+    # §4.7 Identity/naming record
+    "identity_naming":         {"kiki", "taki", "mama", "tata", "chiki"},
+    # §4.8 Astronomical catalog (CORE words only — 2 confirmed: UR006, UR1145)
+    "astronomical_journal":    {"kama", "mama", "paka", "maqa"},
+    # §4.9 Mit'a labor register
+    "labor_tribute":           {"maki", "taka", "kata", "paka", "maka", "paki",
+                                 "makay", "takay", "kiki", "kaki", "tama"},
+    # §4.10 Security register
+    "security_register":       {"maka", "taka", "kata", "kama"},
+    # §4.11 Interrogation form (flat + piqa)
+    "interrogation_form":      {"piqa", "pi", "pita", "pika", "may"},
+    # §4.12 Production dossier (multi-khipu linked)
+    "production_dossier":      {"maki", "paki", "tama", "kaki", "qaqa"},
+    # §4.13 Oracle/ritual text
+    "ritual_oracle":           {"taki", "naqa", "pama", "napa", "naku", "tina",
+                                 "llapa", "nay", "waka"},
+    # §4.14 Pre-Inca binary (detected via Form schema)
+    "pre_inca_binary":         set(),  # detected by schema, not vocabulary
+    # Agro-pastoral (from this session's reclassification)
+    "agro_pastoral":           {"kaki", "kaqa", "wama", "chaqa", "paki", "taki",
+                                 "taqa", "siqa", "maki"},
+    # Kinship lineage
+    "kinship_lineage":         {"kaka", "mama", "papa", "tata", "pana", "tayta",
+                                 "panaka", "tayka", "nana"},
 }
 
 
@@ -834,6 +859,11 @@ class TranslationResult:
             f"  Clusters: {s['num_clusters']}",
             f"  Architecture: {self.architecture}",
         ]
+
+        # Schema detection
+        from khipu_translator.schema import detect_schema
+        schema = detect_schema(self)
+        lines.append(f"  Schema: {schema.schema_type.upper()} (depth L{schema.max_depth})")
 
         # Date detection
         from khipu_translator.dating import extract_date

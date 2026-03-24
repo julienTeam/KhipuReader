@@ -257,6 +257,30 @@ def cmd_info(args):
         print(f"Notes:      {khipu.notes[:200]}")
 
 
+def cmd_schema(args):
+    """Detect the physical schema of a khipu."""
+    from khipu_translator.database import KhipuDB
+    from khipu_translator.translator import translate
+    from khipu_translator.schema import detect_schema, format_schema
+
+    db = KhipuDB(db_path=args.db) if args.db else KhipuDB()
+
+    try:
+        result = translate(args.khipu, db=db)
+    except KeyError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+    finally:
+        db.close()
+
+    schema = detect_schema(result)
+    print(f"{'=' * 50}")
+    print(f"  {result.khipu.investigator_num} — Schema")
+    print(f"{'=' * 50}")
+    print(format_schema(schema))
+    print(f"{'=' * 50}")
+
+
 def cmd_header(args):
     """Show the 'identity card' of a khipu (first cluster analysis)."""
     from khipu_translator.database import KhipuDB
@@ -358,6 +382,12 @@ def main():
     p_cp.add_argument("khipu2", help="Second khipu ID")
     p_cp.add_argument("--db", help=db_help)
     p_cp.set_defaults(func=cmd_compare)
+
+    # schema
+    p_sc = sub.add_parser("schema", help="Detect physical schema type")
+    p_sc.add_argument("khipu", help="Khipu ID")
+    p_sc.add_argument("--db", help=db_help)
+    p_sc.set_defaults(func=cmd_schema)
 
     # header
     p_hd = sub.add_parser("header", aliases=["h"], help="Show document identity card")
