@@ -1542,7 +1542,7 @@ def translate(
         n_colors=_n_colors,
     )
 
-    return TranslationResult(
+    result = TranslationResult(
         khipu=khipu,
         cords=all_cords,
         clusters=clusters,
@@ -1552,3 +1552,26 @@ def translate(
         vocabulary=vocabulary,
         stats=stats,
     )
+
+    # Post-processing: if a date is detected, remove date-zone words
+    # from vocabulary. These "words" are actually numbers (dates) read
+    # through the syllabary — not real textual content.
+    from khipu_translator.dating import extract_date
+    date = extract_date(result)
+    if date and date.mode in ("A", "AB"):
+        # The date zone = first 3 L1 cords (year, month, day)
+        # Find their cord IDs and remove their readings from vocabulary
+        date_zone_count = 0
+        max_date_cords = 3  # year + month + day
+        for cl in clusters:
+            for c in cl.cords:
+                if c.level == 1 and date_zone_count < max_date_cords:
+                    if c.alba_reading and c.alba_reading in vocabulary:
+                        vocabulary[c.alba_reading] -= 1
+                        if vocabulary[c.alba_reading] <= 0:
+                            del vocabulary[c.alba_reading]
+                    date_zone_count += 1
+            if date_zone_count >= max_date_cords:
+                break
+
+    return result
