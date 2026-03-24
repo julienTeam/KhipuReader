@@ -21,7 +21,7 @@ KNOWLEDGE_DB: dict[str, dict] = {
     "UR006": {
         "summary": ("Astronomical observation journal (~1500 CE, Leymebamba). "
                     "24 months x 9 columns tracking Moon, Mars, Pleiades and dark "
-                    "constellations. Confirmed by 5 independent proofs: Mars ephemerides "
+                    "constellations. Supported by 5 independent lines of evidence: Mars ephemerides "
                     "(r=0.62), Pleiades invisibility matching Blas Valera, eclipse at "
                     "month 9, local climate in P9, and cross-site validation with UR1136."),
         "confidence": "High (5 convergent proofs)",
@@ -293,12 +293,13 @@ COMPARATIVE EVIDENCE
   Their compensation totals (169, 188) are 4x LOWER than UR1091 (682).
   The death markers are what distinguish murder from assault.
 
-LINGUISTIC DISCOVERY
-  The Quechua word wañuy (to die) is unwritable in ALBA because the
-  phoneme ñ (palatal nasal) has no knot encoding. This forces the scribe
-  to use a periphrasis: "tana mana" = "the support is no more".
-  This structural limitation of the syllabary explains why "death" never
-  appears as a single word in any of the 619 khipus.""",
+NOTE ON THE WORD "DEATH"
+  The Quechua word wañuy (to die) appears to be unwritable in ALBA
+  because the phoneme ñ (palatal nasal) has no known knot encoding.
+  If correct, this would require the scribe to use a periphrasis such
+  as "tana mana" (the support is no more) instead of a single word.
+  This is a tentative observation — the reading of UR1091 as a murder
+  case is one plausible interpretation among others.""",
         "references": [
             "Sivan 2026, ALBA Project",
             "Illapa thunder god: mythlok.com/illapa",
