@@ -262,6 +262,7 @@ def cmd_header(args):
     from khipu_translator.database import KhipuDB
     from khipu_translator.translator import translate
     from khipu_translator.header import analyze_header, format_header
+    from khipu_translator.dating import extract_date, format_date
 
     db = KhipuDB(db_path=args.db) if args.db else KhipuDB()
 
@@ -275,6 +276,44 @@ def cmd_header(args):
 
     header = analyze_header(result, lang=args.lang)
     print(format_header(header))
+
+    # Also show date if detectable
+    date = extract_date(result)
+    if date:
+        date.khipu_id = result.khipu.investigator_num
+        print("\n  DATE DETECTED")
+        print(f"  {'─' * 40}")
+        print(format_date(date))
+
+
+def cmd_date(args):
+    """Extract date from a khipu."""
+    from khipu_translator.database import KhipuDB
+    from khipu_translator.translator import translate
+    from khipu_translator.dating import extract_date, format_date, DEFAULT_EPOCH
+
+    db = KhipuDB(db_path=args.db) if args.db else KhipuDB()
+    epoch = args.epoch or DEFAULT_EPOCH
+
+    try:
+        result = translate(args.khipu, db=db)
+    except KeyError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+    finally:
+        db.close()
+
+    date = extract_date(result, epoch=epoch)
+    if date:
+        date.khipu_id = result.khipu.investigator_num
+        print(f"{'=' * 50}")
+        print(f"  {result.khipu.investigator_num} — Date")
+        print(f"{'=' * 50}")
+        print(f"  Provenance: {result.khipu.provenance or 'Unknown'}")
+        print(format_date(date))
+        print(f"{'=' * 50}")
+    else:
+        print(f"{result.khipu.investigator_num}: no date pattern detected")
 
 
 def cmd_syllabary(args):
@@ -326,6 +365,14 @@ def main():
     p_hd.add_argument("--db", help=db_help)
     p_hd.add_argument("--lang", choices=["en", "fr", "es"], default="en")
     p_hd.set_defaults(func=cmd_header)
+
+    # date
+    p_dt = sub.add_parser("date", aliases=["d"], help="Extract date from a khipu")
+    p_dt.add_argument("khipu", help="Khipu ID")
+    p_dt.add_argument("--db", help=db_help)
+    p_dt.add_argument("--epoch", type=int, default=None,
+                       help="Reference epoch (default: 1438 CE)")
+    p_dt.set_defaults(func=cmd_date)
 
     # unclaimed
     p_uc = sub.add_parser("unclaimed", help="List unanalyzed khipus")

@@ -1166,6 +1166,23 @@ class TranslationResult:
             f"  Architecture: {self.architecture}",
         ]
 
+        # Date detection
+        from khipu_translator.dating import extract_date
+        date = extract_date(self)
+        if date:
+            day_str = f"/{date.day:02d}" if date.day else ""
+            if date.year_ce and date.month:
+                lines.append(
+                    f"  Date: {date.year_ce}/{date.month:02d}{day_str} CE"
+                    f" ({date.month_name or ''}, {date.gregorian_month or ''})"
+                    f" [Mode {date.mode}]"
+                )
+            elif date.month:
+                lines.append(
+                    f"  Month: {date.month} ({date.month_name or ''}, "
+                    f"{date.gregorian_month or ''}) [Mode {date.mode}]"
+                )
+
         if s.get("l1_null_cords", 0) > 0:
             lines.append(
                 f"  L-1 (unreadable): {s['l1_null_cords']} cords "
