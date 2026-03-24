@@ -1,3 +1,5 @@
+*[Leer en español](README.es.md)*
+
 # KhipuReader
 
 **An open-source tool for reading Andean khipus.**
