@@ -135,42 +135,72 @@ def _try_mode_a(
     types: list,
     epoch: int,
 ) -> Optional[KhipuDate]:
-    """Try Mode A: C1=year offset, C2=month, C3=day."""
-    c1 = values[0] if len(values) > 0 else None
-    c2 = values[1] if len(values) > 1 else None
-    c3 = values[2] if len(values) > 2 else None
+    """
+    Try Mode A (v4): explicit year/month/day.
 
-    # C1 must be non-round integer 13-100
-    if c1 is None or c1 < 13 or c1 > 100:
+    Rules:
+      YEAR: first non-round INT (13-100) in positions 0-2
+      MONTH: next INT 1-12 after year (skip STRING cords, max 3 positions forward)
+      DAY: next INT 1-30 after month (optional)
+      CONFIDENCE: HIGH if month != 10, MEDIUM if month == 10
+    """
+    # Step 1: find YEAR in positions 0-2
+    year_val = None
+    year_pos = None
+    for i in range(min(3, len(values))):
+        v = values[i]
+        if v is not None and isinstance(v, int) and 13 <= v <= 100 and v % 10 != 0:
+            year_val = v
+            year_pos = i
+            break
+
+    if year_val is None:
         return None
-    if c1 % 10 == 0:  # round numbers are likely tribute
+
+    # Step 2: find MONTH after year (skip STRING, max 3 positions forward)
+    month_val = None
+    month_pos = None
+    for offset in range(1, 4):
+        pos = year_pos + offset
+        if pos >= len(values):
+            break
+        if types[pos] == "STRING":
+            continue  # skip STRING cords
+        v = values[pos]
+        if v is not None and isinstance(v, int) and 1 <= v <= 12:
+            month_val = v
+            month_pos = pos
+            break
+
+    if month_val is None:
         return None
 
-    # C2 must be 1-12 (month)
-    if c2 is None or c2 < 1 or c2 > 12:
-        return None
+    # Step 3: find DAY after month (next position, optional)
+    day_val = None
+    if month_pos is not None:
+        day_pos = month_pos + 1
+        if day_pos < len(values):
+            v = values[day_pos]
+            if v is not None and isinstance(v, int) and 1 <= v <= 30:
+                day_val = v
 
-    # C3 is optional (day, 1-30)
-    day = None
-    if c3 is not None and 1 <= c3 <= 30:
-        day = c3
+    year_ce = epoch + year_val
 
-    year_ce = epoch + c1
-    confidence = "medium"
-    notes = f"Mode A: C1={c1} (year offset), C2={c2} (month)"
-    if day:
-        notes += f", C3={day} (day)"
-        confidence = "medium"
-    else:
-        notes += ", no day detected"
+    # Confidence: HIGH if month != 10, MEDIUM if month == 10
+    # (month 10 = value 10 = ambiguous with tick mark)
+    confidence = "HIGH" if month_val != 10 else "MEDIUM"
+
+    notes = f"Mode A (v4): year={year_val} (pos {year_pos}), month={month_val} (pos {month_pos})"
+    if day_val:
+        notes += f", day={day_val}"
 
     date = KhipuDate(
         khipu_id="",
         mode="A",
-        year_offset=c1,
+        year_offset=year_val,
         year_ce=year_ce,
-        month=c2,
-        day=day,
+        month=month_val,
+        day=day_val,
         month_name=None,
         gregorian_month=None,
         season=None,
@@ -189,70 +219,97 @@ def _try_mode_b(
     types: list,
     epoch: int,
 ) -> Optional[KhipuDate]:
-    """Try Mode B: checkbox pattern with "10" as tick mark."""
-    # Need at least 12 positions
-    if len(values) < 12:
+    """
+    Try Mode B (v4): checkbox pattern.
+
+    Scan first 12 positions for a lone non-zero value among zeros/STRING.
+    The non-zero value should be >= 10 (a tick mark).
+    Position (1-indexed) = month.
+    """
+    if len(values) < 6:
         return None
 
-    # First cord should be 0, STRING, or EMPTY
-    if values[0] is not None and values[0] > 0 and types[0] == "INT":
-        # C1 has a positive value — might be Mode A, not B
-        # Unless C1 is round (tribute) or > 12
-        if values[0] % 10 != 0 and 13 <= values[0] <= 100:
-            return None  # looks like Mode A
-
-    # Scan first 12 positions for "10" ticks
-    ticks = []
-    for i in range(min(12, len(values))):
+    # Don't apply checkbox if Mode A already found a clear year
+    # (avoid double-counting)
+    for i in range(min(3, len(values))):
         v = values[i]
-        if v == 10:
-            ticks.append(i + 1)  # 1-indexed
+        if v is not None and isinstance(v, int) and 13 <= v <= 100 and v % 10 != 0:
+            return None  # Mode A handles this khipu
+
+    # Scan first 12 positions
+    n_scan = min(12, len(values))
+    ticks = []
+    for i in range(n_scan):
+        v = values[i]
+        t = types[i]
+        # A tick is a non-zero INT value (typically 10, but could be other)
+        if v is not None and isinstance(v, int) and v > 0 and t == "INT":
+            ticks.append((i + 1, v))  # (position 1-indexed, value)
 
     if len(ticks) == 0:
         return None
 
-    # Check that non-tick positions are mostly 0 or STRING
-    non_tick_nonzero = 0
-    for i in range(min(12, len(values))):
-        if (i + 1) not in ticks:
-            v = values[i]
-            if v is not None and v > 0 and types[i] == "INT":
-                non_tick_nonzero += 1
-
-    # Allow up to 3 non-tick non-zero values (some khipus have sparse data)
-    if non_tick_nonzero > 3:
-        return None
-
-    month = ticks[0]
-    is_double = len(ticks) >= 2
-
-    confidence = "medium" if not is_double else "low"
-    if non_tick_nonzero == 0:
-        confidence = "high" if not is_double else "medium"
-
-    if is_double:
-        notes = f"Mode B: checkbox ticks at positions {ticks} (date range months {ticks[0]}-{ticks[-1]})"
-    else:
-        notes = f"Mode B: checkbox tick at position {month}"
-
-    date = KhipuDate(
-        khipu_id="",
-        mode="B",
-        year_offset=None,
-        year_ce=None,
-        month=month,
-        day=None,
-        month_name=None,
-        gregorian_month=None,
-        season=None,
-        confidence=confidence,
-        epoch=epoch,
-        notes=notes,
-        checkbox_ticks=ticks,
-        checkbox_double=is_double,
+    # Check sparsity: most positions should be 0 or STRING
+    n_zero_or_string = sum(
+        1 for i in range(n_scan)
+        if values[i] is None or values[i] == 0 or types[i] in ("STRING", "EMPTY")
     )
-    _fill_month_info(date)
-    return date
+    sparsity = n_zero_or_string / n_scan
+
+    if sparsity < 0.6:
+        return None  # too many non-zero values = not a checkbox
+
+    # Single tick
+    if len(ticks) == 1:
+        month = ticks[0][0]
+        tick_val = ticks[0][1]
+        confidence = "HIGH" if tick_val == 10 and sparsity >= 0.8 else "MEDIUM"
+
+        date = KhipuDate(
+            khipu_id="",
+            mode="B",
+            year_offset=None,
+            year_ce=None,
+            month=month,
+            day=None,
+            month_name=None,
+            gregorian_month=None,
+            season=None,
+            confidence=confidence,
+            epoch=epoch,
+            notes=f"Mode B: checkbox tick={tick_val} at position {month} (sparsity {sparsity:.0%})",
+            checkbox_ticks=[month],
+            checkbox_double=False,
+        )
+        _fill_month_info(date)
+        return date
+
+    # Double tick (date range)
+    if len(ticks) == 2:
+        m1 = ticks[0][0]
+        m2 = ticks[1][0]
+
+        date = KhipuDate(
+            khipu_id="",
+            mode="B",
+            year_offset=None,
+            year_ce=None,
+            month=m1,
+            day=None,
+            month_name=None,
+            gregorian_month=None,
+            season=None,
+            confidence="MEDIUM",
+            epoch=epoch,
+            notes=f"Mode B: double tick at positions {m1} and {m2} (range months {m1}-{m2})",
+            checkbox_ticks=[m1, m2],
+            checkbox_double=True,
+        )
+        _fill_month_info(date)
+        return date
+
+    # Triple+ ticks — too many, probably not a date
+    return None
 
 
 def _fill_month_info(date: KhipuDate) -> None:
