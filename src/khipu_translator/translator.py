@@ -382,28 +382,59 @@ class TranslationResult:
         }
 
     def _gloss(self, word: str, lang: str) -> str:
+        from khipu_translator.glossary_es import GLOSSARY_ES
         base = ""
-        if word in GLOSSARY:
+        if lang == "es" and word in GLOSSARY_ES:
+            base = GLOSSARY_ES[word]
+        elif word in GLOSSARY:
             fr, en, _ = GLOSSARY[word]
             base = en if lang == "en" else fr
         else:
-            morph = analyze_morphology(word, lang)
-            if morph.compound_parts:
-                if lang == "fr":
-                    base = " + ".join(p[1] for p in morph.compound_parts)
-                else:
-                    base = " + ".join(p[2] for p in morph.compound_parts)
-            elif morph.is_decomposable and morph.root_gloss_en:
-                g = morph.root_gloss_en if lang == "en" else morph.root_gloss_fr
-                if morph.suffixes:
-                    suf_str = "+".join(s[1] for s in morph.suffixes)
-                    base = f"{g} [{suf_str}]"
-                else:
-                    base = g
+            # Try onset normalization for Spanish too
+            from khipu_translator.dictionary import normalize_onset
+            norm = normalize_onset(word)
+            if lang == "es" and norm in GLOSSARY_ES:
+                base = GLOSSARY_ES[norm]
+            elif norm != word and norm in GLOSSARY:
+                fr, en, _ = GLOSSARY[norm]
+                base = en if lang == "en" else fr
+            else:
+                morph = analyze_morphology(word, lang)
+                if morph.compound_parts:
+                    if lang == "es":
+                        # For compounds, gloss each part in Spanish
+                        parts = []
+                        for p in morph.compound_parts:
+                            w = p[0]
+                            es = GLOSSARY_ES.get(w, p[2])  # fallback to English
+                            parts.append(es)
+                        base = " + ".join(parts)
+                    elif lang == "fr":
+                        base = " + ".join(p[1] for p in morph.compound_parts)
+                    else:
+                        base = " + ".join(p[2] for p in morph.compound_parts)
+                elif morph.is_decomposable and morph.root_gloss_en:
+                    if lang == "es":
+                        g = GLOSSARY_ES.get(morph.root, morph.root_gloss_en)
+                    elif lang == "en":
+                        g = morph.root_gloss_en
+                    else:
+                        g = morph.root_gloss_fr
+                    if morph.suffixes:
+                        suf_str = "+".join(s[1] for s in morph.suffixes)
+                        base = f"{g} [{suf_str}]"
+                    else:
+                        base = g
         return base
 
     def _domain_gloss(self, word: str, lang: str) -> str:
         """Return domain-specific meaning if available for this document type."""
+        if lang == "es":
+            from khipu_translator.glossary_es import DOMAIN_GLOSSARIES_ES
+            glossary = DOMAIN_GLOSSARIES_ES.get(self.document_type)
+            if glossary and word in glossary:
+                return glossary[word]
+            return ""
         glossary = DOMAIN_GLOSSARIES.get(self.document_type)
         if glossary and word in glossary:
             fr, en = glossary[word]

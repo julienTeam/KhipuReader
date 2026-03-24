@@ -278,7 +278,7 @@ def main():
     p_tr.add_argument("khipu", help="Khipu ID (e.g. UR039, AS030)")
     p_tr.add_argument("--db", help=db_help)
     p_tr.add_argument("--level", type=int, choices=[1, 2, 3], default=None)
-    p_tr.add_argument("--lang", choices=["en", "fr"], default="en")
+    p_tr.add_argument("--lang", choices=["en", "fr", "es"], default="en")
     p_tr.add_argument("--json", metavar="FILE")
     p_tr.add_argument("--csv", metavar="FILE")
     p_tr.add_argument("--xml", metavar="FILE")
