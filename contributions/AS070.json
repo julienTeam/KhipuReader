@@ -3,13 +3,13 @@
   "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
   "date": "2026-03-25",
   "status": "proposed",
-  "confidence": "high",
-  "summary": "Astronomical catalog in hierarchical format. 588 cords, depth 6. Companion of AS069. 7/10 astro labels including chaki=Scorpio. Third confirmed astro site.",
-  "interpretation": "See knowledge.py for full notes.",
-  "column_names": {},
+  "confidence": "High (7/10 astro labels, paired with AS069, Thompson 2024)",
+  "summary": "Astronomical observation catalog in hierarchical format (Mollepampa, Arica, Chile). 588 cords, depth 6 (deepest in corpus). Companion of AS069 (Thompson 2024): same data reorganized as a 6-level tree. 7/10 ALBA celestial labels: chaki(Scorpio), kaki(Pleiades), qaqa(dark constell.), maki(Mars), taki(Saturn?), paqa(heliacal), waqa. Third confirmed astronomical site after Leymebamba and Pachacamac. Dated ~April 1453 (same as AS069).",
+  "interpretation": "IDENTIFICATION\n  588 cords, 6 levels deep (deepest schema in corpus).\n  Mollepampa, Arica, Chile. Museo Chileno de Arte Precolombino.\n  KFG ref: KH0083. Ascher ref: AS070. Urton ref: UR035.\n  Date: ~April 1453 (same period as paired khipu AS069).\n\nPAIRED WITH AS069\n  Thompson (2024, Ethnohistory) proved AS069 and AS070 encode the\n  same data: AS069 as flat table (7 cols x ~130 sections), AS070\n  as 6-level hierarchy. The rows of one are the columns of the other.\n  A \"pivot table\" pair — the first documented in khipu studies.\n\nCELESTIAL LABELS (7/10 — more than AS069)\n  HIGH:   chaki(Scorpio) x1, kaki(Pleiades) x2, qaqa(dark constell.) x2\n  MEDIUM: maki(Mars-obs) x1\n  LOW:    taki(Saturn?) x3, paqa(heliacal) x1, waqa x1\n  Notable: chaki (Scorpio) = astro-exclusive label, only on astro khipus.\n  taki x3 on AS070 but 0 on AS069 — Saturn tracked in hierarchical\n  format but not in flat format?\n\nSTRUCTURE\n  Red (SR) cords = section separators (clusters 1, 2, 13).\n  Astronomical labels at depth L3-L5 = sub-category tags.\n  This is the deepest astronomical document: 6 levels of hierarchy\n  for organizing multi-object observations.\n\nOBSERVATORY NETWORK\n  4th confirmed astronomical khipu (with AS069 as paired companion):\n  - AS069/AS070 (Arica, 1453): flat + hierarchical pair\n  - UR006 (Leymebamba, 1473): 9-column journal\n  - UR1145 (Pachacamac, 1516): label-measure catalog",
   "references": [
-    "Thompson 2024 Ethnohistory",
-    "Sivan 2026 ALBA"
+    "Thompson 2024, Ethnohistory (AS069/AS070 numerical connection)",
+    "Sivan 2026, ALBA Project",
+    "Runasimi astronomical dictionary (Lucre, Cusco) — chaki=Scorpio"
   ],
   "reconstructed_xlsx": null
 }

@@ -3,13 +3,13 @@
   "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
   "date": "2026-03-25",
   "status": "proposed",
-  "confidence": "high",
-  "summary": "Astronomical catalog, April 1453 CE. World largest khipu (1831 cords). 6/10 astro labels. Paired with AS070 (Thompson 2024). Mars+Jupiter double opposition peak. p<0.00001.",
-  "interpretation": "See knowledge.py for full notes.",
-  "column_names": {},
+  "confidence": "High (p<0.00001, Bonferroni OK, cross-validated with UR006 Mars cycle)",
+  "summary": "Astronomical observation catalog, dated April 1453 CE (Lluta Valley, Arica, Chile). The world's largest khipu (1,831 cords). 6/10 ALBA celestial labels: kaki(Pleiades) x3, maki(Mars-obs) x3, maqa(eclipse) x3, qaqa(dark constell.) x2, paqa(heliacal) x1, waqa x1. Flat table format (7 columns x ~130 sections). Peak total 1616 at section 20 = Mars+Jupiter double opposition (Dec 1454). p<0.00001, survives Bonferroni. Paired with AS070 (Thompson 2024): same data in hierarchical format.",
+  "interpretation": "IDENTIFICATION\n  World's largest khipu: 1,831 cords, 458 groups.\n  Lluta Valley, Arica, Chile. Owner: Percy Dauelsberg.\n  KFG ref: KH0082. Ascher ref: AS069.\n  Flat table format, 7 columns (Thompson 2024).\n  Date: April 1453 CE (multi-object astronomical dating, p<0.00001).\n\nDATING\n  Multi-object correlation with 130 non-zero sections.\n  Best fit: April 1453 (r=0.330, p<0.00001, survives Bonferroni).\n  Peak 1616 at section 20 (Nov 1454) = Mars opposition (154 deg)\n  + Jupiter quasi-opposition (172 deg) = double opposition event.\n  Second peak 866 at section 28 (Jul 1455) = Saturne (112 deg),\n  not Mars (38 deg) — multi-planetary tracking.\n\nCROSS-VALIDATION WITH UR006\n  AS069 covers ~1453-1465, UR006 covers 1473-1475. No overlap but\n  same Mars clock: 5 Mars oppositions in AS069 (Dec 54, Jan 57,\n  Feb 59, Mar 61, Apr 63), spaced 25-26 months = exact synodic cycle.\n  UR006 Mars opposition (Feb 1474) = 5 cycles after AS069's last.\n\nPAIRED WITH AS070\n  Thompson (2024, Ethnohistory) demonstrated AS069 and AS070 encode\n  the same data: AS069 as flat table, AS070 as 6-level hierarchy.\n  A \"pivot table\" pair. AS070 has 7/10 astro labels vs AS069's 6/10.\n\nCELESTIAL LABELS (6/10)\n  kaki(Pleiades) x3, maki(Mars-obs) x3, maqa(eclipse) x3,\n  qaqa(dark constell.) x2, paqa(heliacal) x1, waqa x1.\n  Notable: maqa x3 = highest eclipse count in corpus.\n\nHISTORICAL CONTEXT\n  1453 = early reign of Pachacutec. The oldest dated astronomical\n  khipu. Created at the southern frontier (Arica) during the first\n  Inca expansions. The world's largest khipu = the empire's first\n  great astronomical catalog.",
   "references": [
-    "Thompson 2024 Ethnohistory",
-    "Sivan 2026 ALBA"
+    "Thompson 2024, Ethnohistory (AS069/AS070 numerical connection)",
+    "Sivan 2026, ALBA Project",
+    "JPL DE431t ephemerides"
   ],
   "reconstructed_xlsx": null
 }

@@ -3,12 +3,13 @@
   "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
   "date": "2026-03-24",
   "status": "reviewed",
-  "confidence": "medium-high",
-  "summary": "Cadastral survey or location instruction (Pachacamac). 29 cords, paired with HP019 (22 cords). Contains qaqa(rock) x4, chiqa(benchmark), taqataqa(boundary), plus a unique triangulation (7-7 symmetric) pointing to a sacred rock (qaqaqa on the only GG cord). 6 anomalies distinguish it from a standard cadastre.",
-  "interpretation": "See knowledge.py for full research notes.",
-  "column_names": {},
+  "confidence": "Medium-High (vocabulary matches UR1095, triangulation structure)",
+  "summary": "Cadastral survey or location instruction (Pachacamac). 29 cords, paired with HP019 (22 cords, same museum, consecutive numbering). Contains qaqa(rock) x4, chiqa(benchmark), taqataqa(boundary), plus a unique triangulation (7-7 symmetric) pointing to a specific sacred rock (qaqaqa on the only GG cord) and a personal signature (takiki). 6 anomalies distinguish it from a standard cadastre.",
+  "interpretation": "IDENTIFICATION\n  29 cords, Museo de Sitio de Pachacamac. Paired with HP019 (22 cords).\n  Cadastral vocabulary + anomalous structure suggesting location instruction.\n\nVOCABULARY\n  qaqa (x4) = rocky landmarks / toponyms\n  chiqa (x1) = survey benchmark (v3: truth/right -> borne)\n  maka (x1) = landmark (not weapon — no juridical context)\n  chikaqa = \"the wall\" (chi + kaqa AY)\n  qaqaqa = \"THE rock\" (qa + qaqa, topicalized)\n  taqataqa = \"boundary\" (redoubled: taqa + taqa)\n  takiki = \"self-mark\" (ta + kiki) — surveyor's signature?\n  makimaqa = hapax (unique in 619 khipus OKR)\n\n6 ANOMALIES vs standard cadastre:\n  1. Too small (29 cords vs 150-971 for normal cadastres)\n  2. Single GG cord = sacred marker on \"THE rock\"\n  3. maka without juridical context\n  4. makimaqa = hapax (word created for this document)\n  5. takiki in a cadastre (never appears in other cadastres)\n  6. Symmetric 7-7 triangulation in cluster 5\n\nHP019+HP020 PAIR: consecutive numbering, same museum, complementary vocabulary.\n  HP020 = route (how to get there), HP019 = local geometry (what's on site).",
   "references": [
-    "Sivan 2026, ALBA Project"
+    "Sivan 2026, ALBA Project",
+    "HP019 companion document",
+    "UR1095 (Pachacamac full cadastre) for vocabulary comparison"
   ],
   "reconstructed_xlsx": null
 }

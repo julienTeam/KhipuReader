@@ -3,10 +3,9 @@
   "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
   "date": "2026-03-24",
   "status": "proposed",
-  "confidence": "medium",
+  "confidence": "Medium (regular 4-column structure, geographic vocabulary)",
   "summary": "Zone inventory — 5 entries in a regular 4-column format (flag | place1 | place2 | measurement). All words start with qa-: qaqa(rock), qama(dwelling), qaki, qaka = 4 named geographic zones. Followed by 4 clusters of pure numbers (recap). A mini-cadastre of 4 neighborhoods.",
-  "interpretation": "See knowledge.py for full research notes.",
-  "column_names": {},
+  "interpretation": "IDENTIFICATION\n  33 cords, Musee de l'Homme, Paris. Provenance unknown.\n  9 STRING words, 4 unique: qaki(x4), qaka(x3), qaqa(x1), qama(x1).\n  All words start with qa- (geographic vocabulary).\n\nFORMAT\n  Clusters 1-5: regular 4-column structure:\n    [B/YB] flag=1 | [W] place_name | [AB] place_name | [W] measurement\n\n  4 zone names:\n    qaqa = rock/mountain\n    qama = dwelling/residential area\n    qaki = frost zone? or place name\n    qaka = wall/cliff or place name\n\n  Clusters 6-9: numerical summary (no STRING).\n\n  Inventory of 5 geographic zones with one measurement each,\n  followed by a numerical recap. Mini-cadastre of 4 named areas.",
   "references": [
     "Sivan 2026, ALBA Project"
   ],

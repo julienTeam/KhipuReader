@@ -3,12 +3,12 @@
   "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
   "date": "2026-03-24",
   "status": "reviewed",
-  "confidence": "medium",
-  "summary": "Naming ceremony (rutuchikuy = first hair cutting). 16 cords, 62% text. Vocabulary entirely about identity: chiki/chikiki/chikikiqa (self/your-identity/regarding-your-identity), plus tata (father), mama (mother), taki (ritual song), qaki (frost = season or child name). Same format as AS014 (British Museum).",
-  "interpretation": "See knowledge.py for full research notes.",
-  "column_names": {},
+  "confidence": "Medium (vocabulary coherent, structure matches AS014)",
+  "summary": "Naming ceremony (rutuchikuy = first hair cutting). 16 cords, 62% text. Vocabulary is entirely about identity: chiki/chikiki/chikikiqa (self/your-identity/regarding-your-identity), plus tata (father), mama (mother), taki (ritual song), qaki (frost = season or child's name). Same format as AS014 (British Museum).",
+  "interpretation": "IDENTIFICATION\n  Naming ceremony record (rutuchikuy = first hair cutting / identity declaration).\n  16 cords, 62% STRING — a textual khipu, not numerical.\n  Musee de l'Homme, Paris.\n\nVOCABULARY (100% explained)\n  chiki (x2) = \"self\" (onset form of kiki)\n  chikiki (x2) = \"your identity\" (kiki + POSS)\n  chikikiqa (x1) = \"regarding your identity\" (kiki + POSS + TOP)\n  tata (x1) = father\n  mama (x1) = mother\n  taki (x1) = ceremony/ritual song\n  chika (x1) = \"so much/such\"\n  qaki (x1) = frost/freeze — season marker or child's name\n\nREADING\n  Cluster 1 (ceremony): \"[2 days of] such ceremony for the self, in frost season.\n    1 mother, 2 [children?]\"\n  Cluster 2 (identity): \"[2 declarations of] your identity: father and self.\n    2. Regarding your identity: 3. Frost.\"\n\n  Colors: W(white) = identity data, B(brown) = father/formal acts,\n  YB(yellow-brown) = special markers.\n\n  qaki (frost) x2 at positions 5 and 8 = either the SEASON of the ceremony\n  (June-July, cold season in the Andes) or the child's NAME (\"born during frost\").\n\nCOMPARISON\n  Similar format to AS014 (British Museum) — also identified as rutuchikuy.\n  Two naming ceremony khipus in two different museums, same structure.",
   "references": [
-    "Sivan 2026, ALBA Project"
+    "Sivan 2026, ALBA Project",
+    "Compare AS014 (British Museum naming ceremony)"
   ],
   "reconstructed_xlsx": null
 }

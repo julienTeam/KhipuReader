@@ -3,12 +3,13 @@
   "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
   "date": "2026-03-24",
   "status": "proposed",
-  "confidence": "medium",
-  "summary": "Pilgrimage register (Pachacamac oracle). 186 cords. 4 words in the header match the 4 documented stages of the Pachacamac pilgrimage: waqaki(ritual weeping), taki(ceremonial song), chaki(walking on foot through 3 enclosures), piqa(ascent to the summit/Temple of the Sun). Small monthly counts (1-15) = pilgrimage events tracked over ~3 years.",
-  "interpretation": "See knowledge.py for full research notes.",
-  "column_names": {},
+  "confidence": "Medium (vocabulary matches documented Pachacamac rituals)",
+  "summary": "Pilgrimage register (Pachacamac oracle). 186 cords from Pachacamac. 4 words in the header match the 4 documented stages of the Pachacamac pilgrimage: waqaki(ritual weeping), taki(ceremonial song), chaki(walking on foot through 3 enclosures), piqa(ascent to the summit/Temple of the Sun). Small monthly counts (1-15) = pilgrimage events tracked over ~3 years.",
+  "interpretation": "IDENTIFICATION\n  186 cords, Musee de l'Homme, Paris. Provenance: Pachacamac.\n  4 STRING words concentrated in cluster 1 (the header).\n\nVOCABULARY = 4 stages of the Pachacamac pilgrimage:\n  waqaki = weeping + POSS = \"ritual lamentation\" (pilgrims wept before the oracle)\n  taki = ceremonial song (accompanied each stage)\n  chaki = foot = pilgrimage on foot (through the 3 enclosures)\n  piqa = summit = ascent to the Temple of the Sun (highest point)\n\nFORMAT\n  Cluster 1 = header with labels + cumulative totals (106, 27, 16)\n  Clusters 2-39 = monthly data in 5-6 columns, small values (1-15)\n  = counting pilgrimage events per month over ~3 years.\n\nHISTORICAL MATCH\n  Documented protocol: pilgrims fasted 20 days, progressed through\n  3 successive courts, spent up to 1 year before reaching the holy of holies.\n  The 4 words match the 4 documented stages exactly.",
   "references": [
-    "Sivan 2026, ALBA Project"
+    "Sivan 2026, ALBA Project",
+    "Pachacamac pilgrimage: the-past.com/feature/pachacamac-pilgrimages",
+    "Oracle protocol: elmundomagico.org/the-oracle-of-pachacamac"
   ],
   "reconstructed_xlsx": null
 }
