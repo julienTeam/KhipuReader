@@ -25,12 +25,25 @@ from pathlib import Path
 from typing import Optional
 
 
-CONTRIBUTIONS_DIR = Path(__file__).parent.parent.parent / "contributions"
+CONTRIBUTIONS_BASE = Path(__file__).parent.parent.parent / "contributions"
+VALIDATED_DIR = CONTRIBUTIONS_BASE / "validated"
+PROPOSED_DIR = CONTRIBUTIONS_BASE / "proposed"
+
+
+def _find_json(khipu_id: str) -> Optional[Path]:
+    """Find the JSON file for a khipu, checking validated/ first then proposed/."""
+    for d in (VALIDATED_DIR, PROPOSED_DIR):
+        path = d / f"{khipu_id}.json"
+        if path.exists():
+            return path
+    return None
 
 
 def get_knowledge(khipu_id: str) -> Optional[dict]:
     """
     Load knowledge entry for a khipu from its JSON file.
+
+    Checks validated/ first, then proposed/.
 
     Parameters
     ----------
@@ -42,8 +55,8 @@ def get_knowledge(khipu_id: str) -> Optional[dict]:
     dict or None
         The knowledge entry, or None if no file exists.
     """
-    path = CONTRIBUTIONS_DIR / f"{khipu_id}.json"
-    if not path.exists():
+    path = _find_json(khipu_id)
+    if path is None:
         return None
 
     try:
@@ -52,7 +65,6 @@ def get_knowledge(khipu_id: str) -> Optional[dict]:
     except (json.JSONDecodeError, OSError):
         return None
 
-    # Only return entries that have meaningful content
     if not data.get("summary") or "TODO" in data.get("summary", ""):
         return None
 
@@ -61,17 +73,18 @@ def get_knowledge(khipu_id: str) -> Optional[dict]:
 
 def list_known_khipus() -> list[str]:
     """Return list of khipu IDs that have knowledge entries."""
-    if not CONTRIBUTIONS_DIR.exists():
-        return []
-
     known = []
-    for path in sorted(CONTRIBUTIONS_DIR.glob("*.json")):
-        try:
-            with open(path, encoding="utf-8") as f:
-                data = json.load(f)
-            if data.get("summary") and "TODO" not in data.get("summary", ""):
-                known.append(data.get("khipu", path.stem))
-        except (json.JSONDecodeError, OSError):
+    for d in (VALIDATED_DIR, PROPOSED_DIR):
+        if not d.exists():
             continue
-
+        for path in sorted(d.glob("*.json")):
+            try:
+                with open(path, encoding="utf-8") as f:
+                    data = json.load(f)
+                if data.get("summary") and "TODO" not in data.get("summary", ""):
+                    kid = data.get("khipu", path.stem)
+                    if kid not in known:
+                        known.append(kid)
+            except (json.JSONDecodeError, OSError):
+                continue
     return known

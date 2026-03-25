@@ -17,7 +17,9 @@ from khipu_translator.database import KhipuDB
 from khipu_translator.translator import translate
 
 
-CONTRIBUTIONS_DIR = Path(__file__).parent.parent.parent / "contributions"
+CONTRIBUTIONS_BASE = Path(__file__).parent.parent.parent / "contributions"
+PROPOSED_DIR = CONTRIBUTIONS_BASE / "proposed"
+VALIDATED_DIR = CONTRIBUTIONS_BASE / "validated"
 
 
 def generate_contribution(
@@ -92,7 +94,7 @@ def generate_contribution(
     }
 
     # Save
-    out_dir = output_dir or CONTRIBUTIONS_DIR
+    out_dir = output_dir or PROPOSED_DIR  # new contributions go to proposed/
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / f"{result.khipu.investigator_num}.json"
 
@@ -104,16 +106,18 @@ def generate_contribution(
 
 def load_contributions(contributions_dir: Optional[Path] = None) -> dict[str, dict]:
     """Load all JSON contribution files."""
-    d = contributions_dir or CONTRIBUTIONS_DIR
+    # Load from both validated/ and proposed/
     contributions = {}
-    if not d.exists():
-        return contributions
-    for f in sorted(d.glob("*.json")):
-        try:
-            with open(f, encoding="utf-8") as fh:
-                data = json.load(fh)
-                kid = data.get("khipu", f.stem)
-                contributions[kid] = data
-        except (json.JSONDecodeError, KeyError):
+    for d in (VALIDATED_DIR, PROPOSED_DIR):
+        if not d.exists():
             continue
+        for f in sorted(d.glob("*.json")):
+            try:
+                with open(f, encoding="utf-8") as fh:
+                    data = json.load(fh)
+                    kid = data.get("khipu", f.stem)
+                    if kid not in contributions:
+                        contributions[kid] = data
+            except (json.JSONDecodeError, KeyError):
+                continue
     return contributions
