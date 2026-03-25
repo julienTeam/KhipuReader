@@ -154,20 +154,21 @@ GLOSSARY_ES: dict[str, str] = {
 # --- Domain glossaries in Spanish ---
 
 ASTRO_GLOSSARY_ES: dict[str, str] = {
+    # ALTA confianza
     "mama":   "Luna (Mama Killa)",
-    "kaki":   "Pléyades (Collca)",
-    "qaqa":   "constelaciones oscuras (Vía Láctea)",
-    "paka":   "orto/ocaso helíaco",
-    "kama":   "Marte (planeta)",
-    "maki":   "¿constelación de la Mano?",
-    "maqa":   "eclipse",
-    "taki":   "ceremonia astronómica",
+    "kama":   "Marte — eventos (oposiciones, estaciones, retrogradaciones)",
+    "qaqa":   "constelaciones oscuras (yana phuyu)",
+    "kaki":   "Pléyades (Qollqa)",
+    "chaki":  "Escorpio (Chaki T'aklla = arado de pie)",
+    # MEDIA confianza
+    "maki":   "Marte — observaciones (noches de trabajo)",
+    "paka":   "ocaso helíaco (desaparición de un astro)",
+    "maqa":   "eclipse / meteoro",
+    # BAJA confianza
+    "taki":   "¿Saturno? o ceremonia de observación",
+    "chapa":  "guardián / centinela (¿estrella guardiana?)",
+    "mapa":   "? (cera AY, no identificado)",
     "llama":  "constelación de la Llama (Yacana)",
-    "pama":   "fórmula de observación",
-    "chaki":  "¿pie (constelación)?",
-    "chama":  "fuerza celeste",
-    "tama":   "grupo de estrellas (cúmulo)",
-    "mata":   "¿cúmulo / nebulosa?",
 }
 
 JURIDICAL_GLOSSARY_ES: dict[str, str] = {

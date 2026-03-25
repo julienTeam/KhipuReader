@@ -182,27 +182,34 @@ GLOSSARY: dict[str, tuple[str, str, str]] = {
 }
 
 
-# --- Astronomical glossary (domain-specific meanings) ------------------------
-# Validated on 9 observatories: UR006, UR1136, UR1145, UR1176, AS069, UR270,
-# UR278, AS070, UR113. See project_quipu_astro_detailed.md.
+# --- Astronomical glossary v3 (domain-specific meanings) ---------------------
+# 11 celestial labels identified. Validated on UR006, UR1145, AS070.
 # These meanings apply when document_type == "astronomical_journal".
+#
+# Confidence: HIGH (5): mama, kama, qaqa, kaki, chaki
+#             MEDIUM (3): maki, paka, maqa
+#             LOW (3): taki, chapa, mapa
+#
+# Reference: Sivan (2026), ALBA Session 25 March.
 
 ASTRO_GLOSSARY: dict[str, tuple[str, str]] = {
     # word: (french_astro, english_astro)
-    "mama":   ("Lune (Mama Killa)",          "Moon (Mama Killa)"),
-    "kaki":   ("Pleiades",                   "Pleiades"),
-    "qaqa":   ("constellations sombres (Voie Lactee)", "dark constellations (Milky Way)"),
-    "paka":   ("lever/coucher heliaque",     "heliacal rising/setting"),
-    "kama":   ("Mars (planete)",             "Mars (planet)"),
-    "maki":   ("constellation Main?",        "Hand constellation?"),
-    "maqa":   ("eclipse",                    "eclipse"),
-    "taki":   ("ceremonie astronomique",     "astronomical ceremony"),
-    "llama":  ("constellation Lama (Yacana)","Llama constellation (Yacana)"),
-    "pama":   ("formule d'observation",      "observation formula"),
-    "chaki":  ("pied (constellation?)",      "foot (constellation?)"),
-    "chama":  ("force celeste",              "celestial force"),
-    "tama":   ("groupe d'etoiles",           "star cluster"),
-    "mata":   ("amas/nebuleuse?",            "cluster/nebula?"),
+    # --- HIGH confidence ---
+    "mama":   ("Lune (Mama Killa)",                         "Moon (Mama Killa)"),
+    "kama":   ("Mars — evenements (oppositions, stations)",  "Mars — events (oppositions, stations)"),
+    "qaqa":   ("constellations sombres (yana phuyu)",        "dark constellations (yana phuyu)"),
+    "kaki":   ("Pleiades (Qollqa)",                          "Pleiades (Qollqa)"),
+    "chaki":  ("Scorpion (Chaki T'aklla = charrue a pied)",  "Scorpio (Chaki T'aklla = foot-plough)"),
+    # --- MEDIUM confidence ---
+    "maki":   ("Mars — observations (nuits de travail)",     "Mars — observations (work nights)"),
+    "paka":   ("coucher heliaque (disparition d'un astre)",  "heliacal setting (star disappearance)"),
+    "maqa":   ("eclipse / meteore",                          "eclipse / meteor"),
+    # --- LOW confidence ---
+    "taki":   ("Saturne? ou ceremonie d'observation",        "Saturn? or observation ceremony"),
+    "chapa":  ("gardien / sentinelle (etoile gardienne?)",   "guardian / sentinel (guardian star?)"),
+    "mapa":   ("? (cire AY, non identifie)",                 "? (wax AY, unidentified)"),
+    # --- Kept from previous version, lower priority ---
+    "llama":  ("constellation Lama (Yacana)",                "Llama constellation (Yacana)"),
 }
 
 
