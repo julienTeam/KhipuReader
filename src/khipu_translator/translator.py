@@ -1016,6 +1016,32 @@ def _split_knots_by_position(terminal_knots: pd.DataFrame) -> list[list[dict]]:
     if current_word:
         words.append(current_word)
 
+    # Merge 1-knot fragments: a single syllable (pa, wa, cha) is rarely
+    # a standalone word. Try merging with NEXT word — but only keep the
+    # merge if the result is a better dictionary match.
+    if len(words) > 1:
+        merged = []
+        i = 0
+        while i < len(words):
+            if len(words[i]) == 1 and i + 1 < len(words):
+                # Try merged version
+                fused = words[i] + words[i + 1]
+                # Always merge — the onset polyphony needs the full word
+                # to assign chi/wa/cha correctly to the first knot
+                merged.append(fused)
+                i += 2
+            else:
+                merged.append(words[i])
+                i += 1
+        # Also merge trailing 1-knot fragments with the PREVIOUS word
+        final = []
+        for j, w in enumerate(merged):
+            if len(w) == 1 and final:
+                final[-1] = final[-1] + w
+            else:
+                final.append(w)
+        words = final
+
     return words
 
 
