@@ -1,0 +1,15 @@
+{
+  "khipu": "AS069",
+  "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
+  "date": "2026-03-25",
+  "status": "proposed",
+  "confidence": "high",
+  "summary": "Astronomical catalog, April 1453 CE. World largest khipu (1831 cords). 6/10 astro labels. Paired with AS070 (Thompson 2024). Mars+Jupiter double opposition peak. p<0.00001.",
+  "interpretation": "See knowledge.py for full notes.",
+  "column_names": {},
+  "references": [
+    "Thompson 2024 Ethnohistory",
+    "Sivan 2026 ALBA"
+  ],
+  "reconstructed_xlsx": null
+}

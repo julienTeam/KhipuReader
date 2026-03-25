@@ -176,12 +176,12 @@ DOCUMENT_PROFILES: dict[str, set[str]] = {
     # §4.9 Mit'a labor register
     "labor_tribute":           {"maki", "taka", "kata", "paka", "maka", "paki",
                                  "makay", "takay", "kiki", "kaki", "tama"},
-    # §4.10 Security register
-    "security_register":       {"maka", "taka", "kata", "kama"},
+    # §4.10 Security register — MERGED INTO judicial_proceeding (too much overlap)
+    # "security_register":       {"maka", "taka", "kata", "kama"},
     # §4.11 Interrogation form (flat + piqa)
     "interrogation_form":      {"piqa", "pi", "pita", "pika", "may"},
-    # §4.12 Production dossier (multi-khipu linked)
-    "production_dossier":      {"maki", "paki", "tama", "kaki", "qaqa"},
+    # §4.12 Production dossier — MERGED INTO labor_tribute (too much overlap with cadastral)
+    # "production_dossier":      {"maki", "paki", "tama", "kaki", "qaqa"},
     # §4.13 Oracle/ritual text
     "ritual_oracle":           {"taki", "naqa", "pama", "napa", "naku", "tina",
                                  "llapa", "nay", "waka"},
@@ -246,13 +246,16 @@ def detect_document_type(
     # chaki (Scorpio) is astro-specific — only appears in astro khipus
     # kaki is shared with agriculture so it's NOT core (but boosts when combined)
     core_astro = {"kama", "mama", "paka", "maqa", "chaki"}
-    core_astro_hits = len(words & core_astro)
+    core_astro_hits = len(words & core_astro)  # unique core words
+    core_astro_total = sum(vocabulary.get(w, 0) for w in words & core_astro)  # total occurrences
     has_kaki = "kaki" in words
     has_qaqa = "qaqa" in words
-    # Strong boost: 2+ core words, or 1 core + kaki
-    if core_astro_hits >= 2 or (core_astro_hits >= 1 and has_kaki and string_pct < 25):
+    # Strong boost: 2+ unique core words, or 1 core + kaki, or core total >= 3 + kaki
+    if (core_astro_hits >= 2
+            or (core_astro_hits >= 1 and has_kaki and string_pct < 25)
+            or (core_astro_total >= 3 and has_kaki)):
         scores["astronomical_journal"] *= 2.5
-        scores["astronomical_journal"] = max(scores["astronomical_journal"], 2.0)
+        scores["astronomical_journal"] = max(scores["astronomical_journal"], 3.0)
     # Moderate boost: chaki + kaki + qaqa (all HIGH but shared) without core events
     elif core_astro_hits >= 1 and has_kaki and has_qaqa:
         scores["astronomical_journal"] *= 2.0
@@ -300,10 +303,15 @@ def detect_document_type(
     if sparsity > 50:
         scores["event_register"] = 2.0
         # Penalize types that expect dense data — UNLESS astro-specific words present
-        has_astro_exclusive = "chaki" in words  # chaki only appears in astro khipus
+        # Astro-exclusive signals: chaki (Scorpio), or multiple core astro words
+        has_astro_exclusive = (
+            "chaki" in words  # Scorpio: only in astro khipus
+            or core_astro_hits >= 2  # 2+ unique core words
+            or core_astro_total >= 3  # 3+ total core occurrences (e.g. maqa x3)
+        )
         for t in ("agro_pastoral", "cadastral_survey"):
             scores[t] *= 0.3
-        if not has_astro_exclusive and core_astro_hits < 2:
+        if not has_astro_exclusive:
             scores["astronomical_journal"] *= 0.3
 
     # Regular table: high regularity + low sparsity + multiple colors

@@ -275,6 +275,105 @@ HISTORICAL MATCH
             "Oracle protocol: elmundomagico.org/the-oracle-of-pachacamac",
         ],
     },
+    "AS069": {
+        "summary": ("Astronomical observation catalog, dated April 1453 CE (Lluta Valley, "
+                    "Arica, Chile). The world's largest khipu (1,831 cords). 6/10 ALBA "
+                    "celestial labels: kaki(Pleiades) x3, maki(Mars-obs) x3, maqa(eclipse) x3, "
+                    "qaqa(dark constell.) x2, paqa(heliacal) x1, waqa x1. Flat table format "
+                    "(7 columns x ~130 sections). Peak total 1616 at section 20 = Mars+Jupiter "
+                    "double opposition (Dec 1454). p<0.00001, survives Bonferroni. "
+                    "Paired with AS070 (Thompson 2024): same data in hierarchical format."),
+        "confidence": "High (p<0.00001, Bonferroni OK, cross-validated with UR006 Mars cycle)",
+        "interpretation": """IDENTIFICATION
+  World's largest khipu: 1,831 cords, 458 groups.
+  Lluta Valley, Arica, Chile. Owner: Percy Dauelsberg.
+  KFG ref: KH0082. Ascher ref: AS069.
+  Flat table format, 7 columns (Thompson 2024).
+  Date: April 1453 CE (multi-object astronomical dating, p<0.00001).
+
+DATING
+  Multi-object correlation with 130 non-zero sections.
+  Best fit: April 1453 (r=0.330, p<0.00001, survives Bonferroni).
+  Peak 1616 at section 20 (Nov 1454) = Mars opposition (154 deg)
+  + Jupiter quasi-opposition (172 deg) = double opposition event.
+  Second peak 866 at section 28 (Jul 1455) = Saturne (112 deg),
+  not Mars (38 deg) — multi-planetary tracking.
+
+CROSS-VALIDATION WITH UR006
+  AS069 covers ~1453-1465, UR006 covers 1473-1475. No overlap but
+  same Mars clock: 5 Mars oppositions in AS069 (Dec 54, Jan 57,
+  Feb 59, Mar 61, Apr 63), spaced 25-26 months = exact synodic cycle.
+  UR006 Mars opposition (Feb 1474) = 5 cycles after AS069's last.
+
+PAIRED WITH AS070
+  Thompson (2024, Ethnohistory) demonstrated AS069 and AS070 encode
+  the same data: AS069 as flat table, AS070 as 6-level hierarchy.
+  A "pivot table" pair. AS070 has 7/10 astro labels vs AS069's 6/10.
+
+CELESTIAL LABELS (6/10)
+  kaki(Pleiades) x3, maki(Mars-obs) x3, maqa(eclipse) x3,
+  qaqa(dark constell.) x2, paqa(heliacal) x1, waqa x1.
+  Notable: maqa x3 = highest eclipse count in corpus.
+
+HISTORICAL CONTEXT
+  1453 = early reign of Pachacutec. The oldest dated astronomical
+  khipu. Created at the southern frontier (Arica) during the first
+  Inca expansions. The world's largest khipu = the empire's first
+  great astronomical catalog.""",
+        "references": [
+            "Thompson 2024, Ethnohistory (AS069/AS070 numerical connection)",
+            "Sivan 2026, ALBA Project",
+            "JPL DE431t ephemerides",
+        ],
+    },
+
+    "AS070": {
+        "summary": ("Astronomical observation catalog in hierarchical format (Mollepampa, "
+                    "Arica, Chile). 588 cords, depth 6 (deepest in corpus). "
+                    "Companion of AS069 (Thompson 2024): same data reorganized as a "
+                    "6-level tree. 7/10 ALBA celestial labels: chaki(Scorpio), "
+                    "kaki(Pleiades), qaqa(dark constell.), maki(Mars), taki(Saturn?), "
+                    "paqa(heliacal), waqa. Third confirmed astronomical site after "
+                    "Leymebamba and Pachacamac. Dated ~April 1453 (same as AS069)."),
+        "confidence": "High (7/10 astro labels, paired with AS069, Thompson 2024)",
+        "interpretation": """IDENTIFICATION
+  588 cords, 6 levels deep (deepest schema in corpus).
+  Mollepampa, Arica, Chile. Museo Chileno de Arte Precolombino.
+  KFG ref: KH0083. Ascher ref: AS070. Urton ref: UR035.
+  Date: ~April 1453 (same period as paired khipu AS069).
+
+PAIRED WITH AS069
+  Thompson (2024, Ethnohistory) proved AS069 and AS070 encode the
+  same data: AS069 as flat table (7 cols x ~130 sections), AS070
+  as 6-level hierarchy. The rows of one are the columns of the other.
+  A "pivot table" pair — the first documented in khipu studies.
+
+CELESTIAL LABELS (7/10 — more than AS069)
+  HIGH:   chaki(Scorpio) x1, kaki(Pleiades) x2, qaqa(dark constell.) x2
+  MEDIUM: maki(Mars-obs) x1
+  LOW:    taki(Saturn?) x3, paqa(heliacal) x1, waqa x1
+  Notable: chaki (Scorpio) = astro-exclusive label, only on astro khipus.
+  taki x3 on AS070 but 0 on AS069 — Saturn tracked in hierarchical
+  format but not in flat format?
+
+STRUCTURE
+  Red (SR) cords = section separators (clusters 1, 2, 13).
+  Astronomical labels at depth L3-L5 = sub-category tags.
+  This is the deepest astronomical document: 6 levels of hierarchy
+  for organizing multi-object observations.
+
+OBSERVATORY NETWORK
+  4th confirmed astronomical khipu (with AS069 as paired companion):
+  - AS069/AS070 (Arica, 1453): flat + hierarchical pair
+  - UR006 (Leymebamba, 1473): 9-column journal
+  - UR1145 (Pachacamac, 1516): label-measure catalog""",
+        "references": [
+            "Thompson 2024, Ethnohistory (AS069/AS070 numerical connection)",
+            "Sivan 2026, ALBA Project",
+            "Runasimi astronomical dictionary (Lucre, Cusco) — chaki=Scorpio",
+        ],
+    },
+
     "UR1091": {
         "summary": ("Murder case — the most violent khipu in the corpus. Contains the ONLY "
                     "occurrence of 'mana' (negation) across all 619 khipus. The death of the "

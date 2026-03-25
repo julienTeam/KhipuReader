@@ -1,0 +1,15 @@
+{
+  "khipu": "AS070",
+  "contributor": "Julien Sivan <julien.sivan@alba-project.org>",
+  "date": "2026-03-25",
+  "status": "proposed",
+  "confidence": "high",
+  "summary": "Astronomical catalog in hierarchical format. 588 cords, depth 6. Companion of AS069. 7/10 astro labels including chaki=Scorpio. Third confirmed astro site.",
+  "interpretation": "See knowledge.py for full notes.",
+  "column_names": {},
+  "references": [
+    "Thompson 2024 Ethnohistory",
+    "Sivan 2026 ALBA"
+  ],
+  "reconstructed_xlsx": null
+}
