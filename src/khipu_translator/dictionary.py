@@ -356,30 +356,14 @@ def _load_wordlist(filename: str) -> set[str]:
         return {line.strip().lower() for line in f if line.strip()}
 
 
-# Load external dictionaries
-_KAIKKI_WORDS = _load_wordlist("quechua_strict_clean.txt")
-_AYMARA_WORDS = _load_wordlist("ids_aymara_spellable.txt")
+# Load the complete ALBA dictionary (3 sources combined):
+#   1. Kaikki/AULEX (14,991 words, modern Quechua 2024)
+#   2. González Holguín (34,890 forms, colonial Quechua 1608)
+#   3. IDS Aymara (869 entries, modern Aymara)
+# Total: ~49,000 forms (with some overlap between sources).
+_COMPLETE_DICT = _load_wordlist("alba_complete_dictionary.txt")
 
-DICTIONARY: set[str] = (
-    set(GLOSSARY.keys())
-    | _KAIKKI_WORDS       # 14,991 modern Quechua words
-    | _AYMARA_WORDS        # 19 spellable Aymara words
-    | {
-        # Additional attested forms (manual)
-        "tatay", "mamay", "kakay", "papay", "yapay",
-        "makita", "mamata", "makiy", "pakiy",
-        "piqa", "pita", "pika", "piy", "pina", "pipa",
-        "sipa", "sipi", "qapi",
-        "nama", "mapa", "kaki", "pataki", "kutina",
-        "kanana", "pakita", "makatana", "takina", "pakina",
-        "wanay", "waqay", "watay", "watana", "wasiy", "wallaqa",
-        "waki", "wama", "wapa", "way",
-        "chay", "chapi", "chaqa", "challay", "chapay",
-        "chiqan", "chikay", "chipa",
-        "tay", "qa", "naq", "kiy", "pati", "ysi",
-        "naka", "pipi", "pima", "pila", "napi", "mapi", "tapi",
-    }
-)
+DICTIONARY: set[str] = set(GLOSSARY.keys()) | _COMPLETE_DICT
 
 
 # --- Syllable inventory (for morphological decomposition) --------------------
@@ -525,7 +509,7 @@ def analyze_morphology(word: str, lang: str = "en") -> MorphAnalysis:
 
     # 3. Root + suffixes (try 3, 2, then 1 suffix)
     if syls and len(syls) >= 2:
-        for n_suf in (3, 2, 1):
+        for n_suf in (5, 4, 3, 2, 1):  # up to 5 suffixes for agglutinative words
             if len(syls) <= n_suf:
                 continue
             root = "".join(syls[:-n_suf])
@@ -562,7 +546,53 @@ def analyze_morphology(word: str, lang: str = "en") -> MorphAnalysis:
                     is_decomposable=True,
                 )
 
-    # 5. No match
+    # 5. Multi-word split: try splitting long words into 2-3 known words
+    # Long agglutinated sequences may be phrases encoded on a single cord
+    if syls and len(syls) >= 4:
+        # Try 2-word split (each part looked up with onset normalization)
+        for split_at in range(2, len(syls) - 1):
+            part1 = "".join(syls[:split_at])
+            part2 = "".join(syls[split_at:])
+            h1 = _lookup(part1)
+            h2 = _lookup(part2)
+            if h1 and h2:
+                _, fr1, en1, _ = h1
+                _, fr2, en2, _ = h2
+                return MorphAnalysis(
+                    word=word, root=part1,
+                    root_gloss_fr=fr1, root_gloss_en=en1,
+                    suffixes=[],
+                    compound_parts=[(part1, fr1, en1), (part2, fr2, en2)],
+                    is_dictionary_match=False,
+                    is_decomposable=True,
+                )
+
+        # Try 3-word split for very long words (6+ syllables)
+        if len(syls) >= 6:
+            for s1 in range(2, len(syls) - 3):
+                for s2 in range(s1 + 1, len(syls) - 1):
+                    p1 = "".join(syls[:s1])
+                    p2 = "".join(syls[s1:s2])
+                    p3 = "".join(syls[s2:])
+                    h1 = _lookup(p1)
+                    h2 = _lookup(p2)
+                    h3 = _lookup(p3)
+                    if h1 and h2 and h3:
+                        _, fr1, en1, _ = h1
+                        _, fr2, en2, _ = h2
+                        _, fr3, en3, _ = h3
+                        return MorphAnalysis(
+                            word=word, root=p1,
+                            root_gloss_fr=fr1, root_gloss_en=en1,
+                            suffixes=[],
+                            compound_parts=[
+                                (p1, fr1, en1), (p2, fr2, en2), (p3, fr3, en3)
+                            ],
+                            is_dictionary_match=False,
+                            is_decomposable=True,
+                        )
+
+    # 6. No match
     is_dict = word in DICTIONARY
     return MorphAnalysis(
         word=word, root=word,
