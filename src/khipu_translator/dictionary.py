@@ -340,23 +340,46 @@ DOMAIN_GLOSSARIES: dict[str, dict[str, tuple[str, str]]] = {
 
 
 # --- Dictionary word set (for validation) ------------------------------------
+# Sources:
+#   1. GLOSSARY keys (~150 words) — manually validated
+#   2. quechua_strict_clean.txt — Kaikki/AULEX (14,991 words, modern Quechua)
+#   3. ids_aymara_spellable.txt — IDS Aymara spellable words (19 words)
+#   4. Additional attested forms (~50 words)
 
-# All words from the glossary + additional attested forms
-DICTIONARY: set[str] = set(GLOSSARY.keys()) | {
-    # Additional attested forms (roots, inflected, compounds)
-    "tatay", "mamay", "kakay", "papay", "yapay",
-    "makita", "mamata", "makiy", "pakiy",
-    "piqa", "pita", "pika", "piy", "pina", "pipa",
-    "sipa", "sipi", "qapi",
-    "nama", "mapa", "kaki", "pataki", "kutina",
-    "kanana", "pakita", "makatana", "takina", "pakina",
-    "wanay", "waqay", "watay", "watana", "wasiy", "wallaqa",
-    "waki", "wama", "wapa", "way",
-    "chay", "chapi", "chaqa", "challay", "chapay",
-    "chiqan", "chikay", "chipa",
-    "tay", "qa", "naq", "kiy", "pati", "ysi",
-    "naka", "pipi", "pima", "pila", "napi", "mapi", "tapi",
-}
+def _load_wordlist(filename: str) -> set[str]:
+    """Load a word-per-line file from the data/ directory."""
+    import os
+    path = os.path.join(os.path.dirname(__file__), "data", filename)
+    if not os.path.exists(path):
+        return set()
+    with open(path, encoding="utf-8") as f:
+        return {line.strip().lower() for line in f if line.strip()}
+
+
+# Load external dictionaries
+_KAIKKI_WORDS = _load_wordlist("quechua_strict_clean.txt")
+_AYMARA_WORDS = _load_wordlist("ids_aymara_spellable.txt")
+
+DICTIONARY: set[str] = (
+    set(GLOSSARY.keys())
+    | _KAIKKI_WORDS       # 14,991 modern Quechua words
+    | _AYMARA_WORDS        # 19 spellable Aymara words
+    | {
+        # Additional attested forms (manual)
+        "tatay", "mamay", "kakay", "papay", "yapay",
+        "makita", "mamata", "makiy", "pakiy",
+        "piqa", "pita", "pika", "piy", "pina", "pipa",
+        "sipa", "sipi", "qapi",
+        "nama", "mapa", "kaki", "pataki", "kutina",
+        "kanana", "pakita", "makatana", "takina", "pakina",
+        "wanay", "waqay", "watay", "watana", "wasiy", "wallaqa",
+        "waki", "wama", "wapa", "way",
+        "chay", "chapi", "chaqa", "challay", "chapay",
+        "chiqan", "chikay", "chipa",
+        "tay", "qa", "naq", "kiy", "pati", "ysi",
+        "naka", "pipi", "pima", "pila", "napi", "mapi", "tapi",
+    }
+)
 
 
 # --- Syllable inventory (for morphological decomposition) --------------------
