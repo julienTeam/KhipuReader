@@ -990,8 +990,11 @@ def _split_knots_by_position(terminal_knots: pd.DataFrame) -> list[list[dict]]:
         kvt = knot.get("knot_value_type", 0) or 0
         knots.append({"tc": tc, "turns": turns, "kvt": int(kvt)})
 
-    # Only split cords with 3+ knots
-    if len(knots) < 3:
+    # Split applies to ALL cords (including 2-knot).
+    # 19% of 2-L/E cords have ascending kvt = real word boundary.
+    # Single-syllable results (pa, ta, ma, ka, qa, y, na, pi) are
+    # real Quechua grammatical morphemes, not artifacts.
+    if len(knots) < 2:
         return [knots]
 
     # Check if kvt data is usable (not all zeros or all same value)
